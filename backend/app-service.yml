@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: datakirk-backend
+  ports:
+  - name: datakirk-backend-port
+    protocol: TCP
+    port: 8000
+    targetPort: 8000
+

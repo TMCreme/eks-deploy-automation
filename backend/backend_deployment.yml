@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datakirk-backend
+  labels:
+    app: datakirk
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: datakirk-backend
+  template:
+    metadata:
+      labels:
+        app: datakirk-backend
+    spec:
+      containers:
+      - name: datakirkbackend
+        image: vixion/datakirk_backend:v1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: uwsgi
+          protocol: TCP
+        env: 
+          - name: DB_HOST
+            value: postgresdb
+          - name: DB_NAME
+            value: devdb
+          - name: DB_USER
+            value: devuser
+          - name: DB_PASS
+            value: changeme1234
+          - name: REDIS_HOST
+            value: 'redis-primary'
+          - name: REDIS_PORT
+            value: '6379'
+          - name: ALLOWED_HOSTS
+            value: "*"
+        

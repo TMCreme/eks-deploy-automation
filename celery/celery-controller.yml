@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    component: celery
+  name: celery-controller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: datakirk-backend
+    spec:
+      containers:
+      - image: vixion/datakirk_backend:v1.0
+        name: datakirk-backend
+        imagePullPolicy: Always
+        command: [ "/bin/sh", "-c" ]
+        args: ["celery -A config beat -l info --detach; celery -A config worker -B -l info"]
+        ports:
+          - name: uwsgi
+            containerPort: 8000
+            protocol: TCP 
+        env: 
+          - name: DB_HOST
+            value: postgresdb
+          - name: DB_NAME
+            value: devdb
+          - name: DB_USER
+            value: devuser
+          - name: DB_PASS
+            value: changeme1234
+          - name: REDIS_HOST
+            value: 'redis-primary'
+          - name: REDIS_PORT
+            value: '6379'
+          - name: ALLOWED_HOSTS
+            value: "*"
+
+
+

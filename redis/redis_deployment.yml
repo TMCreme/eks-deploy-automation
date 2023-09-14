@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-primary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      role: primary
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: primary
+        tier: backend
+    spec:
+      containers:
+        - name: redis
+          image: redis:5.0.4
+          resources:
+            requests:
+              cpu: 1
+              memory: 100Mi
+          ports:
+            - containerPort: 6379
+
+      #     volumeMounts:
+      #     - mountPath: /redis-master-data
+      #       name: data
+      #     - mountPath: /redis-master
+      #       name: config
+      # volumes:
+      #   - name: data
+      #     emptyDir: {}
+      #   - name: config
+      #     configMap:
+      #       name: example-redis-config
+      #       items:
+      #       - key: redis-config
+      #         path: redis.conf
+
+
